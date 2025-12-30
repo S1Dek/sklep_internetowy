@@ -1,46 +1,67 @@
 <?php
 
-use App\Http\Controllers\ProfileController;
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\ProfileController;
+use App\Http\Controllers\ProductController;
+use App\Http\Controllers\Admin\UserController;
+use App\Http\Controllers\Admin\ProductController as AdminProductController;
 
-Route::get('/', function () {
-    return view('welcome');
-});
+/*
+|--------------------------------------------------------------------------
+| SKLEP (PUBLICZNY)
+|--------------------------------------------------------------------------
+*/
+Route::get('/', [ProductController::class, 'index'])
+    ->name('shop.index');
 
-Route::get('/dashboard', function () {
-    return view('dashboard');
-})->middleware(['auth', 'verified'])->name('dashboard');
+Route::get('/product/{product}', [ProductController::class, 'show'])
+    ->name('shop.show');
 
+/*
+|--------------------------------------------------------------------------
+| PROFIL (AUTH) dla usera itp
+|--------------------------------------------------------------------------
+*/
 Route::middleware('auth')->group(function () {
-    Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
-    Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
-    Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
+    Route::get('/profile', [ProfileController::class, 'edit'])
+        ->name('profile.edit');
+    Route::patch('/profile', [ProfileController::class, 'update'])
+        ->name('profile.update');
+    Route::delete('/profile', [ProfileController::class, 'destroy'])
+        ->name('profile.destroy');
 });
 
-Route::get('/', function () {
-    return view('welcome');
-});
+/*
+|--------------------------------------------------------------------------
+| PANEL ADMINISTRATORA
+|--------------------------------------------------------------------------
+*/
+Route::middleware(['auth', 'role:admin'])
+    ->prefix('admin')
+    ->name('admin.')
+    ->group(function () {
 
-Route::middleware(['auth'])->group(function () {
+        // PANEL GŁÓWNY (KAFELKI)
+        Route::get('/', function () {
+            return view('dashboard.admin');
+        })->name('dashboard');
 
-    Route::get('/dashboard', function () {
-        return view('dashboard.user');
-    })->middleware('role:user');
+        // UŻYTKOWNICY
+        Route::resource('users', UserController::class)
+            ->except(['show']);
 
-    Route::get('/admin', function () {
-        return view('dashboard.admin');
-    })->middleware('role:admin');
+        // PRODUKTY
+        Route::resource('products', AdminProductController::class)
+            ->except(['show']);
+    });
 
-});
+/*
+|--------------------------------------------------------------------------
+| KOSZYK (PLACEHOLDER)
+|--------------------------------------------------------------------------
+*/
+Route::post('/cart/add/{product}', function () {
+    return back()->with('success', 'Dodano do koszyka (placeholder)');
+})->middleware('auth')->name('cart.add');
 
-Route::middleware(['auth', 'role:admin'])->prefix('admin')->name('admin.')->group(function () {
-    Route::resource('users', \App\Http\Controllers\Admin\UserController::class);
-});
-
-Route::get('/dashboard', function () {
-    return view('dashboard');
-})->middleware(['auth'])->name('dashboard');
-
-
-
-require __DIR__.'/auth.php';
+require __DIR__ . '/auth.php';

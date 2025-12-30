@@ -28,8 +28,10 @@
             @endisset
 
             <!-- Page Content -->
-            <main>
-                {{ $slot }}
+            <main class="min-h-screen bg-gray-100">
+                <div class="max-w-7xl mx-auto py-8 px-4">
+                    {{ $slot }}
+                </div>
             </main>
         </div>
     </body>
