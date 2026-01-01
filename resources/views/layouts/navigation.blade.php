@@ -37,7 +37,21 @@
 
             <!-- PRAWA STRONA -->
             <div class="hidden sm:flex sm:items-center sm:ms-6">
-                @auth
+                    @auth
+                    <a href="{{ route('cart.index') }}"
+                    class="relative text-gray-700 hover:text-indigo-600">
+                        🛒
+                        @php
+                            $cartCount = collect(session('cart', []))->sum('quantity');
+                        @endphp
+
+                        @if ($cartCount > 0)
+                            <span class="absolute -top-2 -right-3 bg-red-600 text-white text-xs
+                                        rounded-full px-2 py-0.5">
+                                {{ $cartCount }}
+                            </span>
+                        @endif
+                    </a>
                     <x-dropdown align="right" width="48">
                         <x-slot name="trigger">
                             <button class="inline-flex items-center px-3 py-2 border border-transparent
@@ -67,6 +81,9 @@
 
                             <form method="POST" action="{{ route('logout') }}">
                                 @csrf
+                                <x-dropdown-link :href="route('orders.index')">
+                                    Zamówienia
+                                </x-dropdown-link>
                                 <x-dropdown-link :href="route('logout')"
                                     onclick="event.preventDefault(); this.closest('form').submit();">
                                     Wyloguj

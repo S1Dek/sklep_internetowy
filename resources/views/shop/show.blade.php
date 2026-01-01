@@ -21,9 +21,14 @@
                 </p>
 
                 @auth
-                    <button class="btn">
-                        Kup
-                    </button>
+                    <form method="POST" action="{{ route('cart.add', $product->id) }}">
+                        @csrf
+
+                        <button type="submit"
+                                class="bg-indigo-600 text-white px-6 py-2 rounded hover:bg-indigo-700">
+                            Kup teraz
+                        </button>
+                    </form>
                 @else
                     <a href="{{ route('login') }}" class="btn">
                         Zaloguj się, aby kupić

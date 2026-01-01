@@ -52,6 +52,7 @@ class RegisteredUserController extends Controller
             return redirect('/admin');
         }
 
-        return redirect('/dashboard');
+        return redirect()->route('shop.index');
+
     }
 }
