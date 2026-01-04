@@ -44,7 +44,7 @@ Route::middleware('auth')->group(function () {
 | PANEL ADMINISTRATORA
 |--------------------------------------------------------------------------
 */
-Route::middleware(['auth', 'role:admin'])
+Route::middleware(['auth', 'role:admin,moderator'])
     ->prefix('admin')
     ->name('admin.')
     ->group(function () {
@@ -53,11 +53,29 @@ Route::middleware(['auth', 'role:admin'])
             return view('dashboard.admin');
         })->name('dashboard');
 
-        Route::resource('users', UserController::class)->except(['show']);
-        Route::resource('products', AdminProductController::class)->except(['show']);
+        // PRODUKTY – ADMIN + MODERATOR
+        Route::resource('products', AdminProductController::class)
+            ->only(['index', 'show', 'create', 'store', 'edit', 'update']);
 
+        // ZAMÓWIENIA – ADMIN + MODERATOR
         Route::resource('orders', AdminOrderController::class)
-            ->only(['index', 'show', 'destroy']);
+            ->only(['index', 'show']);
+        
+        Route::delete('/products/{product}', [AdminProductController::class, 'destroy'])
+            ->name('products.destroy');
+
+        Route::delete('/orders/{order}', [AdminOrderController::class, 'destroy'])
+            ->name('orders.destroy');
+    });
+
+// TYLKO ADMIN – USERS
+Route::middleware(['auth', 'role:admin'])
+    ->prefix('admin')
+    ->name('admin.')
+    ->group(function () {
+
+        Route::resource('users', UserController::class)
+            ->except(['show']);
     });
 
 /*

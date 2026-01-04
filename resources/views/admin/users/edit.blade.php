@@ -23,8 +23,9 @@
             <div>
                 <label class="block font-semibold">Rola</label>
                 <select name="role" class="w-full border rounded px-3 py-2">
-                    <option value="user" @selected($user->role === 'user')>User</option>
                     <option value="admin" @selected($user->role === 'admin')>Admin</option>
+                    <option value="moderator" @selected($user->role === 'moderator')>Moderator</option>
+                    <option value="user" @selected($user->role === 'user')>User</option>
                 </select>
             </div>
 

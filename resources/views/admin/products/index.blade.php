@@ -30,21 +30,31 @@
                         <td class="border px-3 py-2">{{ $product->price }} zł</td>
                         <td class="border px-3 py-2">{{ $product->stock }}</td>
                         <td class="border px-3 py-2 space-x-2">
-                            <a href="{{ route('admin.products.edit', $product) }}"
-                               class="bg-yellow-400 px-3 py-1 rounded">
-                                Edytuj
-                            </a>
 
-                            <form method="POST"
-                                  action="{{ route('admin.products.destroy', $product) }}"
-                                  class="inline">
-                                @csrf
-                                @method('DELETE')
-                                <button class="bg-red-600 text-white px-3 py-1 rounded"
-                                        onclick="return confirm('Usunąć produkt?')">
-                                    Usuń
-                                </button>
-                            </form>
+                            {{-- EDYTUJ / USUŃ – TYLKO ADMIN --}}
+                            @if(auth()->user()->role === 'admin')
+                                <a href="{{ route('admin.products.edit', $product) }}"
+                                class="bg-yellow-400 px-3 py-1 rounded">
+                                    Edytuj
+                                </a>
+
+                                <form method="POST"
+                                    action="{{ route('admin.products.destroy', $product) }}"
+                                    class="inline">
+                                    @csrf
+                                    @method('DELETE')
+                                    <button class="bg-red-600 text-white px-3 py-1 rounded"
+                                            onclick="return confirm('Usunąć produkt?')">
+                                        Usuń
+                                    </button>
+                                </form>
+                            @endif
+
+                            {{-- SZCZEGÓŁY – ADMIN + MODERATOR --}}
+                            <a href="{{ route('admin.products.show', $product) }}"
+                            class="bg-blue-600 text-white px-3 py-1 rounded">
+                                Szczegóły
+                            </a>
                         </td>
                     </tr>
                 @empty

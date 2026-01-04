@@ -25,22 +25,26 @@
            		<td class="border px-3 py-2">{{ number_format($order->total_price, 2) }} zł</td>
             		<td class="border px-3 py-2">{{ strtoupper($order->status) }}</td>
             		<td class="border px-3 py-2">{{ $order->created_at->format('Y-m-d H:i') }}</td>
-                        <td class="border px-3 py-2 space-x-2">
-                            {{--
+                    <td class="border px-3 py-2 space-x-2">
+                            
+                        {{--
                             <a href="{{ route('admin.orders.edit', $order) }}"
-                               class="bg-yellow-400 px-3 py-1 rounded">
+                            class="bg-yellow-400 px-3 py-1 rounded">
                                 Edytuj
                             </a>
-                            --}}
+                        --}}
 
-                            <a href="{{ route('admin.orders.show', $order) }}"
-                                class="bg-blue-600 text-white px-3 py-1 rounded">
-                                Szczegóły
-                            </a>
+                        {{-- SZCZEGÓŁY – ADMIN + MODERATOR --}}
+                        <a href="{{ route('admin.orders.show', $order) }}"
+                        class="bg-blue-600 text-white px-3 py-1 rounded">
+                            Szczegóły
+                        </a>
 
+                        {{-- USUŃ – TYLKO ADMIN --}}
+                        @if(auth()->user()->role === 'admin')
                             <form method="POST"
-                                  action="{{ route('admin.orders.destroy', $order) }}"
-                                  class="inline">
+                                action="{{ route('admin.orders.destroy', $order) }}"
+                                class="inline">
                                 @csrf
                                 @method('DELETE')
                                 <button class="bg-red-600 text-white px-3 py-1 rounded"
@@ -48,7 +52,8 @@
                                     Usuń
                                 </button>
                             </form>
-                        </td>
+                        @endif
+                    </td>
                     </tr>
                 @empty
                     <tr>
@@ -62,4 +67,3 @@
         {{ $orders->links() }}
     </div>
 </x-app-layout>
-

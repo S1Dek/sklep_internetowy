@@ -25,10 +25,14 @@
 
                     {{-- PANEL ADMINA – tylko admin --}}
                     @auth
-                        @if(Auth::user()->role === 'admin')
-                            <x-nav-link :href="route('admin.dashboard')"
-                                        :active="request()->routeIs('admin.*')">
-                                Panel administratora
+                        @if(auth()->user()->role === 'admin')
+                            <x-nav-link :href="route('admin.dashboard')" :active="request()->routeIs('admin.*')">
+                                Panel Administratora
+                            </x-nav-link>
+
+                        @elseif(auth()->user()->role === 'moderator')
+                            <x-nav-link :href="route('admin.dashboard')" :active="request()->routeIs('admin.*')">
+                                Panel Moderatora
                             </x-nav-link>
                         @endif
                     @endauth
