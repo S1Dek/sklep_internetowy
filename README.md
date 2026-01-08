@@ -1,7 +1,7 @@
 ## Funkcjonalności
 
 -   Rejestracja i logowanie użytkowników (hashowanie haseł)
--   Trzy role użytkowników: user, admin, gość(niezalogowany)
+-   Cztery role użytkowników: user,moderator, admin, gość(niezalogowany)
 -   Różne panele po zalogowaniu
 -   Panel administracyjny CRUD użytkowników
 -   Walidacja danych dla produktów
