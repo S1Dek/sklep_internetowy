@@ -12,8 +12,13 @@
 
 /// URUCHOMIENIE PROJEKTU
 composer update bacon/bacon-qr-code --prefer-dist
+
 composer install
+
 php artisan config:clear  
+
 php artisan migrate:refresh
+
 php artisan key:generate
+
 php artisan serve 
